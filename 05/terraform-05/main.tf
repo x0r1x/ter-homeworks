@@ -4,7 +4,6 @@ module "vpc_prod" {
   subnets = [
     { zone = "ru-central1-a", cidr = "10.0.1.0/24" },
     { zone = "ru-central1-b", cidr = "10.0.2.0/24" },
-    #{ zone = "ru-central1-c", cidr = "10.0.3.0/24" }, # Не доступна
     { zone = "ru-central1-d", cidr = "10.0.3.0/24" },
   ]
 }
@@ -15,4 +14,10 @@ module "vpc_dev" {
   subnets = [
     { zone = "ru-central1-a", cidr = "10.0.1.0/24" },
   ]
+}
+
+resource "yandex_vpc_security_group" "sec_grp" {
+  name        = "sec_grp"
+  description = "description for my security group"
+  network_id  = module.vpc_dev.vpc_network_id
 }
