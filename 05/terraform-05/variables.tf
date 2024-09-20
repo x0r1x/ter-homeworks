@@ -92,3 +92,71 @@ variable "s3_dev_mod" {
     max_size = 1024 * 1024 * 1024 # 1GB 
   }
 }
+
+variable "not_valid_ip" {
+  type=string
+  description="ip-адрес"
+  default = "1920.1680.0.1"
+  validation {
+    condition = can(regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$", var.not_valid_ip))
+    error_message = "Error, IP address is incorrect "
+  }
+}
+
+variable "valid_ip" {
+  type=string
+  description="ip-адрес"
+  default = "192.168.0.1"
+  validation {
+    condition = can(regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$", var.valid_ip))
+    error_message = "Error, IP address is incorrect"
+  }
+}
+
+variable "list_valid_ip" {
+  type=list(string)
+  description="список ip-адресов"
+  default = ["192.168.0.1", "1.1.1.1", "127.0.0.1"]
+  validation {
+    condition = alltrue([for i in var.list_valid_ip: can(regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$", i))])
+    error_message = "Error, var of list IP address is incorrect"
+  }
+}
+
+variable "list_not_valid_ip" {
+  type=list(string)
+  description="список ip-адресов"
+  default = ["192.168.0.1", "1.1.1.1", "1270.0.0.1"]
+  validation {
+    condition = alltrue([for i in var.list_not_valid_ip: can(regex("^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$", i))])
+    error_message = "Error, var of list IP address is incorrect"
+  }
+}
+
+variable "upper_letter" {
+  type=string
+  description="upper letter"
+  default = "one more Time"
+  validation {
+    condition = !can(regex("[A-Z]+", var.upper_letter))
+    error_message = "Error, the string contains uppercase characters"
+  }
+}
+
+variable "in_the_end_there_can_be_only_one" {
+    description="Who is better Connor or Duncan?"
+    type = object({
+        Dunkan = optional(bool)
+        Connor = optional(bool)
+    })
+
+    default = {
+        Dunkan = true
+        Connor = false
+    }
+
+    validation {
+        error_message = "There can be only one MacLeod"
+        condition = var.in_the_end_there_can_be_only_one.Dunkan != var.in_the_end_there_can_be_only_one.Connor
+    }
+}
