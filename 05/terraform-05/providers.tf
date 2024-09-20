@@ -3,7 +3,12 @@ terraform {
 
   required_providers {
     yandex = {
-      source = "yandex-cloud/yandex"
+      source  = "yandex-cloud/yandex"
+      version = "0.129.0"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.68.0"
     }
   }
   backend "s3" {
@@ -13,9 +18,6 @@ terraform {
     }
     region ="ru-central1"
     key = "terraform.tfstate"
-
-    #access_key                  = "..."          #Только для примера! Не хардкодим секретные данные!
-    #secret_key                  = "..."          #Только для примера! Не хардкодим секретные данные!
     skip_region_validation      = true
     skip_credentials_validation = true
     skip_requesting_account_id  = true # Необходимая опция Terraform для версии 1.6.1 и старше.
@@ -24,7 +26,6 @@ terraform {
 }
 
 provider "yandex" {
-  #token     = var.token
   cloud_id  = var.cloud_id
   folder_id = var.folder_id
   zone      = var.default_zone
